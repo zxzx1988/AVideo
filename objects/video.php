@@ -31,6 +31,7 @@ if (!class_exists('Video')) {
         private $duration;
         private $users_id;
         private $categories_id;
+        private $categories_name;
         private $old_categories_id;
         private $type;
         private $rotation;
@@ -266,7 +267,13 @@ if (!class_exists('Video')) {
 
             if (empty($this->categories_id)) {
                 $p = AVideoPlugin::loadPluginIfEnabled("PredefinedCategory");
-                $category = Category::getCategoryDefault();
+                $category = null;
+                if (empty($this->categories_name)) {
+                    $category = Category::getCategoryDefault();
+                }
+                else{
+                    $category = Category::getOrCreateCategoryByName($this->categories_name);
+                }
                 $categories_id = $category['id'];
                 if (empty($categories_id)) {
                     $categories_id = 'NULL';
@@ -1885,6 +1892,10 @@ if (!class_exists('Video')) {
             }
             AVideoPlugin::onVideoSetCategories_id($this->id, $this->categories_id, $categories_id);
             $this->categories_id = $categories_id;
+        }
+
+        public function setCategories_name($categories_name) {
+            $this->categories_name = $categories_name;
         }
 
         public static function getCleanDuration($duration = "") {

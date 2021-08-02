@@ -178,6 +178,10 @@ if (!empty($_POST['categories_id'])) {
     $video->setCategories_id($_POST['categories_id']);
 }
 
+if (!empty($_POST['categories_name'])) {
+    $video->setCategories_name($_POST['categories_name']);
+}
+
 $video_id = $video->save();
 $video->updateDurationIfNeed();
 $video->updateHLSDurationIfNeed();
