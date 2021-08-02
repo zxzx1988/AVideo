@@ -4063,6 +4063,27 @@ if (!class_exists('Video')) {
             return false;
         }
 
+        public function isDuplicateVideo(){
+            if (!empty($this->title)){
+                $sql = "SELECT id FROM videos WHERE title= ? ";
+                $res = sqlDAL::readSql($sql, "s", array($this->title));
+                $fullData = sqlDAL::fetchAllAssoc($res);
+                $total = count($fullData);
+                sqlDAL::close($res);
+
+                if ($total <= 0){
+                    return false;
+                }
+                else if ($total == 1 && !empty($this->id) && $this->id == $fullData[0]['id']){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static function userGroupAndVideoGroupMatch($users_id, $videos_id) {
             if (empty($videos_id)) {
                 return false;

@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 $obj = new stdClass();
 $obj->error = true;
+$obj->error_code = 100;
 
 global $global, $config;
 if (!isset($global['systemRootPath'])) {
@@ -10,6 +11,7 @@ if (!isset($global['systemRootPath'])) {
 }
 
 if (empty($_POST)) {
+    $obj->error_code = 101;
     $obj->msg = __("Your POST data is empty, maybe your video file is too big for the host");
     _error_log($obj->msg);
     die(json_encode($obj));
@@ -26,12 +28,14 @@ useVideoHashOrLogin();
 if (!User::canUpload()) {
     _error_log("aVideoEncoder.json: Permission denied to receive a file: " . json_encode($_POST));
     $obj->msg = __("Permission denied to receive a file: ") . json_encode($_POST);
+    $obj->error_code = 102;
     _error_log($obj->msg);
     die(json_encode($obj));
 }
 
 if (!empty($_POST['videos_id']) && !Video::canEdit($_POST['videos_id'])) {
     _error_log("aVideoEncoder.json: Permission denied to edit a video: " . json_encode($_POST));
+    $obj->error_code = 103;
     $obj->msg = __("Permission denied to edit a video: ") . json_encode($_POST);
     _error_log($obj->msg);
     die(json_encode($obj));
@@ -54,6 +58,15 @@ if (empty($title) && !empty($_POST['title'])) {
     $title = $video->setTitle($_POST['title']);
 } elseif (empty($title)) {
     $video->setTitle("Automatic Title");
+}
+
+if ($video->isDuplicateVideo()){
+    _error_log("Permission denied to add a duplicate video: " . json_encode($_POST));
+    $obj->msg = __("Permission denied to add a duplicate video.");
+    $obj->error_code = 104;
+    $obj->video_title = $video->getTitle();
+    
+    die(json_encode($obj));    
 }
 
 if (empty($description)) {
@@ -143,6 +156,7 @@ if (!empty($_FILES['video']['tmp_name'])) {
 if (!empty($_FILES['image']['tmp_name']) && !file_exists("{$destination_local}.jpg")) {
     if (!move_uploaded_file($_FILES['image']['tmp_name'], "{$destination_local}.jpg")) {
         $obj->msg = print_r(sprintf(__("Could not move image file [%s.jpg]"), $destination_local), true);
+        $obj->error_code = 105;
         _error_log("aVideoEncoder.json: " . $obj->msg);
         die(json_encode($obj));
     }
@@ -150,6 +164,7 @@ if (!empty($_FILES['image']['tmp_name']) && !file_exists("{$destination_local}.j
 if (!empty($_FILES['gifimage']['tmp_name']) && !file_exists("{$destination_local}.gif")) {
     if (!move_uploaded_file($_FILES['gifimage']['tmp_name'], "{$destination_local}.gif")) {
         $obj->msg = print_r(sprintf(__("Could not move gif image file [%s.gif]"), $destination_local), true);
+        $obj->error_code = 106;
         _error_log("aVideoEncoder.json: " . $obj->msg);
         die(json_encode($obj));
     }
@@ -175,6 +190,7 @@ if (!empty($_POST['usergroups_id'])) {
 }
 
 $obj->error = false;
+$obj->error_code = 0;
 $obj->video_id = $video_id;
 
 $v = new Video('', '', $video_id);
