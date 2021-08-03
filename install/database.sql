@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `extra_info` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `user_UNIQUE` (`user` ASC))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `users_blob` (
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `sites` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `sites` (
   `status` CHAR(1) NULL DEFAULT NULL,
   `secret` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `videos`
@@ -189,7 +189,7 @@ CONSTRAINT `fk_videos_playlists1`
   REFERENCES `playlists` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `videos_metadata` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `videos_metadata` (
     REFERENCES `videos` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `comments`
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
     REFERENCES `comments` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -434,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `subscribes` (
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `playlists` (
     REFERENCES `users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `playlists_has_videos`
@@ -496,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   `pluginversion` VARCHAR(6) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -522,7 +522,7 @@ CREATE TABLE IF NOT EXISTS `comments_likes` (
     REFERENCES `comments` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- Table `category_type_cache`
@@ -569,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `users_extra_info` (
   `order` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `ordersortusers_extra_info` USING BTREE (`order`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `category_type_cache`
   ADD UNIQUE KEY `categoryId` (`categoryId`);
