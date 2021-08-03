@@ -67,11 +67,15 @@ class Category {
 
     function setName($name) {
         $this->name = $name;
+        $this->setClean_name($name);
     }
 
-    function setClean_name($clean_name) {
-        $clean_name = preg_replace('/\W+/', '-', strtolower(cleanString($clean_name)));
-        $this->clean_name = $clean_name;
+    function setClean_name($name) {
+        $this->clean_name = self::calculateCleanName($name);
+    }
+
+    static function calculateCleanName($name){
+        return preg_replace('/\W+/', '-', strtolower(cleanString($name)));
     }
 
     function setNextVideoOrder($nextVideoOrder) {
@@ -295,7 +299,8 @@ class Category {
     }
 
     static function getOrCreateCategoryByName($name) {
-        $cat = self::getCategoryByName($name);
+        $clean_name = self::calculateCleanName($name);
+        $cat = self::getCategoryByName($clean_name);
         if (empty($cat)) {
             $obj = new Category(0);
             $obj->setName($name);
@@ -306,7 +311,7 @@ class Category {
             $obj->setParentId(0);
 
             $id = $obj->save();
-            return self::getCategoryByName($name);
+            return self::getCategoryByName($clean_name);
         }
         return $cat;
     }
