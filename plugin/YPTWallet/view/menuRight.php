@@ -30,7 +30,7 @@ $balance = $plugin->getBalance(User::getId());
             <li class="dropdown-submenu">
                 <a tabindex="-1" href="<?php echo $global['webSiteRootURL']; ?>plugin/YPTWallet/view/manualAddFunds.php">
                     <i class="fa fa-plus" aria-hidden="true"></i>
-                    <?php echo $obj->manualAddFundsMenuTitle; ?>
+                    <?php echo __($obj->manualAddFundsMenuTitle); ?>
                 </a>
             </li>
             <?php
@@ -40,17 +40,15 @@ $balance = $plugin->getBalance(User::getId());
             <li class="dropdown-submenu">
                 <a tabindex="-1" href="<?php echo $global['webSiteRootURL']; ?>plugin/YPTWallet/view/manualWithdrawFunds.php">
                     <i class="far fa-money-bill-alt" aria-hidden="true"></i>
-                    <?php echo $obj->manualWithdrawFundsMenuTitle; ?>
-                </a>
-            </li>
-            <?php
-            }
-            if($obj->enableAutoWithdrawFundsPage){
-            ?>
-            <li class="dropdown-submenu">
-                <a tabindex="-1" href="<?php echo $global['webSiteRootURL']; ?>plugin/YPTWallet/view/autoWithdrawFunds.php">
-                    <i class="far fa-money-bill-alt" aria-hidden="true"></i>
-                    <?php echo $obj->manualWithdrawFundsMenuTitle; ?>
+                    <?php echo __($obj->manualWithdrawFundsMenuTitle); ?>
+                    
+                    <?php
+                    if ($obj->enableAutoWithdrawFundsPagePaypal) {
+                        ?>
+                        <span class="badge"><i class="fab fa-paypal"></i></span>    
+                        <?php
+                    }
+                    ?>
                 </a>
             </li>
             <?php
@@ -68,6 +66,9 @@ $balance = $plugin->getBalance(User::getId());
                     <?php echo __("History"); ?>
                 </a>
             </li>
+            <?php
+            if(empty($obj->hideConfiguration)){
+            ?>
             <li class="dropdown-submenu">
                 <a tabindex="-1" href="<?php echo $global['webSiteRootURL']; ?>plugin/YPTWallet/view/configuration.php">
                     <i class="fas fa-cog" aria-hidden="true"></i>
@@ -75,10 +76,11 @@ $balance = $plugin->getBalance(User::getId());
                 </a>
             </li>
             <?php
+            }
             if (User::isAdmin()) {
                 $total = WalletLog::getTotalFromWallet(0,true,'pending');
                 ?>
-                <li class="dropdown-header">Admin Menu</li>
+                <li class="dropdown-header"><?php echo __("Admin Menu"); ?></li>
                 <li class="dropdown-submenu">
                     <a tabindex="-1" href="<?php echo $global['webSiteRootURL']; ?>plugin/YPTWallet/view/adminManageWallets.php">
                         <i class="fa fa-users" aria-hidden="true"></i>
