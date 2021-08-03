@@ -75,7 +75,7 @@ if (!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAI
 
 $user = new User(0);
 $user->setUser($_POST['user']);
-$user->setPassword($_POST['pass']);
+$user->setPassword($_POST['pass'],true);
 $user->setEmail($_POST['email']);
 $user->setName($_POST['name']);
 
