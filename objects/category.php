@@ -301,9 +301,21 @@ class Category {
         return ($res) ? $result : false;
     }
 
+    static function getCategoryByCatName($name) {
+        global $global;
+        $sql = "SELECT * FROM categories WHERE name = ? LIMIT 1";
+        $res = sqlDAL::readSql($sql, "s", array($name));
+        $result = sqlDAL::fetchAssoc($res);
+        sqlDAL::close($res);
+        if ($result) {
+            $result['name'] = xss_esc_back($result['name']);
+            $result['description_html'] = textToLink(htmlentities($result['description']));
+        }
+        return ($res) ? $result : false;
+    }
+
     static function getOrCreateCategoryByName($name) {
-        $clean_name = self::calculateCleanName($name);
-        $cat = self::getCategoryByName($clean_name);
+        $cat = self::getCategoryByCatName($name);
         if (empty($cat)) {
             $obj = new Category(0);
             $obj->setName($name);
@@ -314,7 +326,7 @@ class Category {
             $obj->setParentId(0);
 
             $id = $obj->save();
-            return self::getCategoryByName($clean_name);
+            return self::getCategoryByCatName($name);
         }
         return $cat;
     }
