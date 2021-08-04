@@ -307,10 +307,6 @@ class Category {
         $res = sqlDAL::readSql($sql, "s", array($name));
         $result = sqlDAL::fetchAssoc($res);
         sqlDAL::close($res);
-        if ($result) {
-            $result['name'] = xss_esc_back($result['name']);
-            $result['description_html'] = textToLink(htmlentities($result['description']));
-        }
         return ($res) ? $result : false;
     }
 
